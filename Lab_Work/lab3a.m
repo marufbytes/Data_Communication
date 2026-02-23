@@ -48,7 +48,7 @@ c2=bw.*log2(1+snr2);
 
 % optimal voltage level
 %L1=2^(c1/(2*bw))
-L2=2^(c2/(2*bw))
+L2=2^(c2/(2*bw))    %Won't br fraction on report
 %L3=2^(c3/(2*bw))
 
 % Nyquist bit rate 
