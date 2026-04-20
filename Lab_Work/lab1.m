@@ -20,7 +20,7 @@ x = x1 +  x2 + x3;
 n = 5.*randn(size(x));
 
 nx = x + n;
-
+                        
 %x1
 subplot(5,2,1);
 plot(t,x1);

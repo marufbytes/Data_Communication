@@ -1,77 +1,58 @@
-clc;clear;
+clc; clear; close all;
 
-%23-51854-2
-A = 2;
-B=3;
-C= 5;
-D=1;
-E=8;
-F=5;
-G=4;
-H=2;
+% ID: 23-51854-2
+A = 2; B = 3; C = 5; D = 1;
+E = 8; F = 5; G = 4; H = 2;
 
-A1= A+B+H;
-A2= B+C+H;
-s = (C+D+H)/30;
+% amplitudes
+A1 = A + B + H;
+A2 = B + C + H;
 
+% noise scale
+v = 0.5;
 
-fs=4000;
-t=0:1/fs:1-1/fs;
-signal = A1*sin(2*pi*((C+D+H)*100)*t)+A2*cos(2*pi*((D+E+H)*100)*t)+ s*randn(size(t)) ;
-v=0.50;
-%n=v.*randn(size(t));
+fs = 4000;
+t = 0:1/fs:1-1/fs;
+
+% frequencies
+f1 = (C + D + H)*100;
+f2 = (D + E + H)*100;
+
+% signal parts
+x1 = A1*sin(2*pi*f1*t);
+x2 = A2*cos(2*pi*f2*t);
+
+% noise
+n = v*randn(size(t));
+
+% final signal
+signal = x1 + x2 + n;
 
 % bandwidth
-bw=obw(signal,fs)
+bw = obw(signal, fs);
 
-% SNR method-1 (usign matlab builtin fucntion)
-%snrdb1=snr(signal,n);
-%snr1=10^(snrdb1/10);
+% signal power (A^2/2 for sin/cos)
+sigpow = (A1^2)/2 + (A2^2)/2;
 
-% method-2
-sigpow=(1.5^2/2)+(0.9^2/2)+(1.1^2/2);
-npow=v^2;
-snr2=sigpow/npow;
-snrdb2=10.*log10(snr2)
+% noise power
+npow = v^2;
 
-% method-3:
-%sigpow2=mean(signal.^2);
-%npow2=mean(n.^2);
-%snr3=sigpow2/npow2;
-%snrdb3=10.*log10(snr3)
+% SNR
+snr2 = sigpow / npow;
+snrdb2 = 10*log10(snr2);
 
-% shanon capacity
-%snrlin=10^(snrdb3/10);
-%c1=bw.*log2(1+snr1);
-c2=bw.*log2(1+snr2);
-%c3=bw.*log2(1+snr3);
+% Shannon capacity
+c2 = bw * log2(1 + snr2);
 
-% optimal voltage level
-%L1=2^(c1/(2*bw))
-L2=2^(c2/(2*bw))    %Won't br fraction on report
-%L3=2^(c3/(2*bw))
+% levels
+L2 = 2^(c2/(2*bw));
 
-% Nyquist bit rate 
-%BR1=2*bw*log2(L1)
-BR2=2*bw*log2(L2)
-%BR3=2*bw*log2(L3)
+% Nyquist bit rate
+BR2 = 2*bw*log2(L2);
 
-
-
-if (c2<=BR2)
+% check condition
+if (c2 <= BR2)
     disp('Correct')
 else 
     disp('Not correct')
-end 
-
-
-
-
-
-
-
-
-
-
-
-
+end
